@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/participe.css">
+    <title>Hall of Fame | Participe</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar bg-primary navbar-expand-sm">
+            <div class="container">
+                <a href="#" class="navbar-brand d-flex align-items-center fs-2 text-decoration-underline">
+                    Hall of Fame
+                    <img src="../../assets/imgs/icons/star-fill.svg" class="ms-2" alt="little star">
+                </a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <form action="/email" method="post" enctype="application/x-www-form-urlencoded" class="form mt-5">
+                <h3 class="title text-center ms-2 mb-4">Participar</h3>
+
+                <div class="row ms-auto mb-5">
+
+                    <!-- Email -->
+                    <div class="col-md-7 mx-auto lg-6 md-6 sm-6">
+                        <label for="email" class="form-label">Email</label>
+                        <div class="input-group">
+
+                            <input type="email" tabindex="1" autofocus class="form-control w-100"
+                                aria-label="email adress" name="email" id="email" required maxlength="100">
+                            <span class="btn btn-outline-secondary" id="clear">x</span>
+                        </div>
+                        <div class="form-text mb-3">Digite o seu melhor email (<span id="emailCounter">0</span>/100)
+                        </div>
+                    </div>
+
+                    <div class="log text-center mb-3">
+                        <p class="text-center text-warning fw-bold d-inline" id="log"></p>
+                    </div>
+                    <div class="loading-screen mx-auto mt-4 mb-3 d-none">
+                        <div class="loader mx-auto"></div>
+                        <p class="text-center mt-3">Verificando email</p>
+                    </div>
+                    <hr>
+                    <!-- Submit button -->
+                    <div class="row">
+                        <button class="btn btn-warning submit mx-auto fs-5 mb-5" type="submit"
+                            tabindex="2">Enviar</button>
+                    </div>
+            </form>
+        </div>
+    </main>
+    <script type="module" src="../../assets/script/emails/email-form.js" defer></script>
+</body>

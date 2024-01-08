@@ -1,0 +1,26 @@
+{
+  "name": "hall-of-fame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev:timeout": "timeout 9000 nodemon --watch src ./src/server.js",
+    "dev": "nodemon --watch src ./src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "dependencies": {
+    "cloudinary": "^1.41.1",
+    "connect-redis": "^7.1.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "nodemailer": "^6.9.7",
+    "redis": "^4.6.12"
+  }
+}

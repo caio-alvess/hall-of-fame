@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/participe.css">
+    <title>Hall of Fame | Participe</title>
+    <style>
+        #email {
+            text-decoration: wavy underline orange;
+            text-underline-offset: 6px;
+            overflow-wrap: break-word;
+
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar bg-primary navbar-expand-sm">
+            <div class="container">
+                <a href="#" class="navbar-brand d-flex align-items-center fs-2 text-decoration-underline">
+                    Hall of Fame
+                    <img src="../../assets/imgs/icons/star-fill.svg" class="ms-2" alt="little star">
+                </a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="container mt-5">
+            <form method="post" enctype="application/x-www-form-urlencoded">
+                <h1 class="title text-center fs-2">Autenticação</h1>
+                <div class="row mx-auto ms-2 mb-5">
+
+                    <h2 class="text-center fs-4">
+                        Um email foi enviado para <%= email %>
+                    </h2>
+                    <p class="text-center mb-2">
+                        Verifique a sua caixa de email e informe o código recebido. <!-- <button class="btn text-center mb-3"
+                            id="wrongEmail">Email errado?</button> -->
+                    </p>
+
+                    <!-- Email -->
+                    <div class="row-6 ">
+                        <div class="col-4 md-4 lg-6 sm-6 mx-auto">
+                            <input type="text" class="form-control text-center mb-2" name="authCode" id="authCode"
+                                tabindex="1" autofocus>
+                        </div>
+
+                    </div>
+                    <div class="loading-screen mx-auto mt-4 mb-3 d-none">
+                        <div class="loader mx-auto"></div>
+                        <p class="text-center mt-3">Verificando email</p>
+                    </div>
+                    <p class="text-center text-warning fw-bold d-inline" id="log"></p>
+                    <hr>
+                    <div class="container mx-auto">
+                        <div class="row-6">
+                            <div class="col">
+                                <button class="btn btn-warning submit fs-5 mb-3 mx-auto d-block"
+                                    id="confirmCode">Confirmar
+                                    código</button>
+                            </div>
+                            <div class="col mb-2">
+                                <button class="btn btn-secondary fs-5 mx-auto d-block" id="resendCode"
+                                    title="Não se esqueça de checar se o email está correto.">
+                                    Reenviar código (30s)
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Submit button -->
+
+                </div>
+            </form>
+            <button class="btn text-center mb-3" id="wrongEmail">Email errado?</button>
+        </div>
+    </main>
+    <footer>
+
+    </footer>
+    <script type="module" src="../../assets/script/emails/authentication.js"></script>
+    <!-- <script src="../../assets/script/emails/Email-log.js"></script> -->
+</body>
