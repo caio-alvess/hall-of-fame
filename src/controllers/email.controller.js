@@ -8,7 +8,6 @@ module.exports = {
     },
     post: asyncCatch(async (req, res) => {
         const email = req.body.email;
-        console.log(email);
         const authCode = getCode();
         const tempSession = {
             dates: Object.defineProperties({}, {

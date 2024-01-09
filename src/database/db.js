@@ -86,7 +86,6 @@ module.exports = {
             };
             const wishList = ['name', 'email', 'socialmedia', 'socialmediaUser', 'img_url'];
 
-            console.log(user);
             for (let property of wishList) {
                 if (!user.hasOwnProperty(property)) {
                     throw new TypeError('missing properties');
