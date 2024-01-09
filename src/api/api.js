@@ -2,7 +2,9 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const cloudinary = require('cloudinary');
-const db = new (require('../database/db').Database)();
+const db = require('../database/db').database;
+const emailSender = require('../utils/EmailSender');
+
 
 const { CLOUD_NAME, API_KEY, API_SECRET } = process.env
 
@@ -29,13 +31,13 @@ function b64toImage(body) {
     })
 }
 
-module.exports = class Api {
+module.exports = {
 
     getUsers(req, res) {
         db.list()
             .then(json => res.json(json))
             .catch(e => console.error(e));
-    }
+    },
 
     /** Only works on temp session*/
     getUserEmail(req, res) {
@@ -44,7 +46,7 @@ module.exports = class Api {
             return res.json({ email });
         }
         res.status(404).json({ message: 'no session logged' });
-    }
+    },
 
     getImage(req, res) {
         if (!req.body) {
@@ -67,7 +69,7 @@ module.exports = class Api {
                 return res.status(500).json({ message: error })
             }
         })();
-    }
+    },
 
     deleteImage(req, res) {
         if (!req.body) {
@@ -87,5 +89,40 @@ module.exports = class Api {
             }
 
         })()
-    }
+    },
+    resendCode(req, res) {
+        const now = Date.now();
+        if (req.session.codeRequests > 1) {
+            let { lastModify } = req.session.dates;
+            let differSecs = (now - lastModify) / 1000;
+
+            if (differSecs <= 120) {
+                // res.header('Retry-After', differSecs);
+                return res.status(429).json({
+                    message: 'too many requests',
+                    remainingTime: differSecs
+                });
+            }
+        }
+        let authCode = getCode();
+        let { email } = req.session;
+        (async () => {
+            try {
+                const response = await emailSender(email, authCode)
+                req.session.dates.lastModify = now;
+                req.session.authCode = authCode;
+                console.log(req.session);
+                res.json({
+                    status: 'success',
+                    message: 'send'
+                })
+            } catch (error) {
+                res.status(500).json({
+                    status: 'error',
+                    message: error
+                })
+            }
+        })()
+    },
+
 };

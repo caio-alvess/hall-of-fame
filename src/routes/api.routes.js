@@ -1,9 +1,10 @@
 const { Router } = require('express');
 const router = Router();
-const api = new (require('../controllers/api'))();
+const api = require('../api/api');
 
 router
     .get('/api/email', api.getUserEmail)
+    .get('/api/email/resend', api.resendCode)
     .get('/api/users', api.getUsers)
     .post('/api/image', api.getImage)
     .delete('/api/image', api.deleteImage)

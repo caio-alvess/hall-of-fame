@@ -1,6 +1,7 @@
 const router = require('express').Router();
-const emailConfirm = new (require('../controllers/email-confirm.controller'))();
-
+const auth = require('../controllers/authenticator.controller');
+const authHandler = require('../middlewares/authenticator-handler');
+/* 
 router.use('/email/confirm', (req, res, next) => {
     if (!req.session.tempSession || !req.session.tempSession.email) {
         res.redirect('/email');
@@ -11,11 +12,11 @@ router.use('/email/confirm', (req, res, next) => {
         return next();
     }
     next();
-})
+}) */
 
 router
-    .get('/email/confirm', emailConfirm.getView)
-    .post('/email/confirm', emailConfirm.post)
-    .delete('/email/confirm', emailConfirm.wrongEmail)
+    .get('/email/confirm', authHandler.viewHandler, auth.view)
+    .post('/email/confirm', authHandler.confirmCodeHandler, auth.confirmCode)
+    .delete('/email/confirm', auth.wrongEmail)
 
 module.exports = router;

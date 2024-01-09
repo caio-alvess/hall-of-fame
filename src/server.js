@@ -3,14 +3,17 @@ const path = require('node:path');
 const session = require('express-session');
 const redis = require('redis');
 const redisStore = require('connect-redis').default;
+const globalErrorHanlder = require('./controllers/error.controller');
 
 const redisClient = redis.createClient();
 
 redisClient.connect().catch((e) => console.error(e));
 
 //import routes
+const indexRoutes = require('./routes/index.routes');
 const apiRoutes = require('./routes/api.routes');
 const emailRoutes = require('./routes/email.routes');
+const authRoutes = require('./routes/authenticator.routes');
 const formRoutes = require('./routes/form.routes');
 
 const app = express();
@@ -33,13 +36,14 @@ app.set('views', path.resolve(__dirname, '../', 'views'))
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
-app.get('/', (req, res) => {
-    res.render('index.html');
-})
 
-// middleware routes
-app.use(emailRoutes);
+//routes
+app.use(indexRoutes)
 app.use(formRoutes);
 app.use(apiRoutes);
+app.use(emailRoutes);
+app.use(authRoutes);
 
+
+app.all('*', globalErrorHanlder);
 app.listen(3000, () => console.log('running on http://localhost:3000/'));

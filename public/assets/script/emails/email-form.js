@@ -32,8 +32,7 @@ document.onsubmit = (e) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: userScreen.userEmail }),
-            redirect: 'follow'
+            body: JSON.stringify({ email: userScreen.userEmail })
         };
         try {
             const rawRes = await fetch('/email', options);

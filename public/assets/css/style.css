@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@500&display=swap');
+
+.navbar-brand {
+    font-family: 'Ysabeau SC', sans-serif !important;
+}
+
 .col-12 {
     gap: 20px !important;
 }

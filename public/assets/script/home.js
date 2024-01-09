@@ -32,7 +32,6 @@ window.onload = async () => {
     const cardPlaceholder = document.querySelector('.usersph');
     const users = await getUsers();
     users.rows.forEach(user => {
-        console.log(user);
         const cardDiv = cardStruct(user);
         cardPlaceholder.appendChild(cardDiv);
     });

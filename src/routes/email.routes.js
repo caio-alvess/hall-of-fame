@@ -1,20 +1,9 @@
 const express = require('express');
-const EmailControllers = require('../controllers/email.controller');
-const email = new EmailControllers.Email();
-const emailConfirm = new EmailControllers.EmailConfirm();
-
+const email = require('../controllers/email.controller');
+const emailHandlers = require('../middlewares/email-handler');
 const router = express.Router();
 
-
 router
-    .get('/email', email.getView)
-    .post('/email', email.post)
-
-    // email/confirm
-
-    .get('/email/confirm', emailConfirm.getView)
-    .post('/email/confirm', emailConfirm.post)
-    .delete('/email/confirm', emailConfirm.wrongEmail)
-
-    .get('/api/email/resend', emailConfirm.resendCode)
+    .get('/email', emailHandlers.viewHandler, email.getView)
+    .post('/email', emailHandlers.checkEmail, email.post)
 module.exports = router;
