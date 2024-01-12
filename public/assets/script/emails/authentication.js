@@ -7,6 +7,27 @@ const userScreen = UserScreen({
     log: '#log'
 })
 
+function handleResendText(retryAfterSecs) {
+    const resendBtn = document.querySelector('#resendCode');
+    const resendText = document.querySelector('#resendText');
+
+    let remainingSecs = Math.floor(retryAfterSecs);
+    userScreen.log('Você só pode fazer uma solicitação a cada 2 minutos. Verifique a sua caixa de e-mail');
+
+    resendBtn.disabled = true;
+
+    let start = setInterval(() => {
+        resendText.innerText =
+            `Espere ${remainingSecs--} segundos para realizar outra requisição.`;
+    }, 1000);
+
+    setTimeout(() => {
+        clearInterval(start);
+        resendText.innerText = '';
+        resendBtn.disabled = false;
+    }, remainingSecs * 1000);
+}
+
 class Authentication {
     isValid = false;
     constructor(wrongEmailId, resendCodeId, userCodeId) {
@@ -32,12 +53,15 @@ class Authentication {
 
     async resendCode(e) {
         e.preventDefault();
+
+
         const rawRes = await fetch('/email/resend-code')
         if (rawRes.status >= 200 && rawRes.status <= 299) {
             userScreen.log('Enviado com sucesso!\nVocê só pode fazer uma solicitação a cada 2 minutos.')
+            return;
         }
-        else {
-            userScreen.log('Erro interno')
+        else if (rawRes.status == 429) {
+            handleResendText(rawRes.headers.get('Retry-After'));
         }
     }
     async confirmCode(userCode) {

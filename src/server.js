@@ -3,7 +3,7 @@ const path = require('node:path');
 const session = require('express-session');
 const redis = require('redis');
 const redisStore = require('connect-redis').default;
-const globalErrorHanlder = require('./controllers/error.controller.js');
+const globalErrorHandler = require('./controllers/error.controller.js');
 
 const redisClient = redis.createClient();
 
@@ -45,5 +45,5 @@ app.use(emailRoutes);
 app.use(authRoutes);
 
 
-app.all('*', globalErrorHanlder);
+app.use(globalErrorHandler);
 app.listen(3000, () => console.log('running on http://localhost:3000/'));
