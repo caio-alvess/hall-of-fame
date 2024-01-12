@@ -90,39 +90,39 @@ module.exports = {
 
         })()
     },
-    resendCode(req, res) {
-        const now = Date.now();
-        if (req.session.codeRequests > 1) {
-            let { lastModify } = req.session.dates;
-            let differSecs = (now - lastModify) / 1000;
-
-            if (differSecs <= 120) {
-                // res.header('Retry-After', differSecs);
-                return res.status(429).json({
-                    message: 'too many requests',
-                    remainingTime: differSecs
-                });
+    /*     resendCode(req, res) {
+            const now = Date.now();
+            if (req.session.codeRequests > 1) {
+                let { lastModify } = req.session.dates;
+                let differSecs = (now - lastModify) / 1000;
+    
+                if (differSecs <= 120) {
+                    // res.header('Retry-After', differSecs);
+                    return res.status(429).json({
+                        message: 'too many requests',
+                        remainingTime: differSecs
+                    });
+                }
             }
-        }
-        let authCode = getCode();
-        let { email } = req.session;
-        (async () => {
-            try {
-                const response = await emailSender(email, authCode)
-                req.session.dates.lastModify = now;
-                req.session.authCode = authCode;
-                console.log(req.session);
-                res.json({
-                    status: 'success',
-                    message: 'send'
-                })
-            } catch (error) {
-                res.status(500).json({
-                    status: 'error',
-                    message: error
-                })
-            }
-        })()
-    },
+            let authCode = getCode();
+            let { email } = req.session;
+            (async () => {
+                try {
+                    const response = await emailSender(email, authCode)
+                    req.session.dates.lastModify = now;
+                    req.session.authCode = authCode;
+                    console.log(req.session);
+                    res.json({
+                        status: 'success',
+                        message: 'send'
+                    })
+                } catch (error) {
+                    res.status(500).json({
+                        status: 'error',
+                        message: error
+                    })
+                }
+            })()
+        }, */
 
 };

@@ -1,81 +1,89 @@
 import { UserScreen } from "./modules/screen.js";
 
-const wrongEmail = document.querySelector('#wrongEmail')
-wrongEmail.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const rawRes = await fetch('/email/confirm', { method: 'DELETE' });
-    console.log(rawRes);
-    if (rawRes.redirected) {
-        location.replace('/email');
-    };
-
-    const res = await rawRes.json();
-    if (rawRes.status >= 500) {
-        userScreen.log(res.message);
-    }
-})
-
 const userScreen = UserScreen({
-    email: '#authCode',
+    input: '#authCode',
     submit: '#confirmCode',
     loadingScreen: '.loading-screen',
     log: '#log'
 })
 
+class Authentication {
+    isValid = false;
+    constructor(wrongEmailId, resendCodeId, userCodeId) {
+        this.wrongEmail = document.querySelector(`#${wrongEmailId}`);
+        this.resend = document.querySelector(`#${resendCodeId}`);
+        this.authCode = document.querySelector(`#${userCodeId}`)
+        this.form = document.querySelector('form');
 
-document.querySelector('#resendCode').addEventListener('click', async (e) => {
-    e.preventDefault();
-    const rawRes = await fetch('/api/email/resend')
-    if (rawRes.status >= 200 && rawRes.status <= 299) {
-        userScreen.log('Enviado com sucesso')
+        //bind
+        this.resendCode = this.resendCode.bind(this);
+        this.redirected = this.redirected.bind(this);
     }
-    else {
-        userScreen.log('Erro interno')
+    async destroy(e) {
+        e.preventDefault();
+        const rawRes = await fetch('/email/confirm', { method: 'DELETE' });
+        if (rawRes.status >= 400) {
+            userScreen.log('Tivemos um erro interno no nosso servidor.\nPor favor, tente novamente.');
+        }
+        if (rawRes.redirected) {
+            location.replace('/email');
+        }
     }
-})
 
-
-const url = '/email/confirm';
-
-async function confirmCode(userCode) {
-    const options = {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            authCode: userCode
-        })
+    async resendCode(e) {
+        e.preventDefault();
+        const rawRes = await fetch('/email/resend-code')
+        if (rawRes.status >= 200 && rawRes.status <= 299) {
+            userScreen.log('Enviado com sucesso!\nVocê só pode fazer uma solicitação a cada 2 minutos.')
+        }
+        else {
+            userScreen.log('Erro interno')
+        }
     }
-    try {
-        userScreen.log(false);
-        userScreen.loading(true);
-        const rawRes = await fetch(url, options);
+    async confirmCode(userCode) {
+        const options = {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                authCode: userCode
+            })
+        }
+        userScreen.log();
+        userScreen.loadingToggle();
+        const rawRes = await fetch('/email/confirm', options);
+        userScreen.loadingToggle();
+        if (rawRes.status >= 400 && rawRes.status <= 499) {
+            userScreen.log('Ops, o seu código está incorreto.\nVerifique o seu email e tente novamente.');
+            return false;
+        }
+        if (rawRes.status >= 500) {
+            userScreen.log('Tivemos um erro interno no nosso servidor.\nSe o erro persistir, por favor entre em contato.');
+            return false;
+        }
         if (rawRes.redirected) {
             return true;
         }
-        const res = await rawRes.json();
-        console.log(res);
-        userScreen.log(res.message);
-        return false;
     }
-    catch (e) {
-        return false;
+
+    async redirected(e) {
+        if (!this.isValid) {
+            e.preventDefault()
+        }
+        const userCode = this.authCode;
+        let isAuthorized = await this.confirmCode(userCode.value);
+        if (isAuthorized) {
+            this.isValid = true;
+            document.querySelector('form').submit();
+        }
     }
-    finally {
-        userScreen.loading(false);
+
+    start() {
+        this.wrongEmail.addEventListener('click', this.destroy);
+        this.resend.addEventListener('click', this.resendCode);
+        this.form.onsubmit = this.redirected;
+
     }
 }
-let isValid = null;
-document.querySelector('form').onsubmit = async (e) => {
-    console.log('inside here');
-    if (!isValid) {
-        e.preventDefault()
-    }
-    const userCode = document.querySelector('#authCode');
-    if (await confirmCode(userCode.value)) {
-        isValid = true;
-        document.querySelector('form').submit();
-    };
-};
-
+new Authentication('wrongEmail', 'resendCode', 'authCode').start();

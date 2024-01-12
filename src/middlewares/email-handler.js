@@ -28,7 +28,8 @@ module.exports = {
         let status = await isEmailValid(email, next)
         if (!status) {
             let error = new CustomError('this email already exists', 409);
-            next(error);
+            return next(error)
+
         }
         next();
     }),

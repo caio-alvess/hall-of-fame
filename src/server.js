@@ -3,7 +3,7 @@ const path = require('node:path');
 const session = require('express-session');
 const redis = require('redis');
 const redisStore = require('connect-redis').default;
-const globalErrorHanlder = require('./controllers/error.controller');
+const globalErrorHanlder = require('./controllers/error.controller.js');
 
 const redisClient = redis.createClient();
 

@@ -1,5 +1,5 @@
 const emailSender = require('../utils/EmailSender');
-const getCode = () => Math.floor(Math.random() * (999999 - 100000) + 100000);
+const getCode = require('../utils/getCode');
 const asyncCatch = require('../utils/asyncCatch');
 
 module.exports = {
