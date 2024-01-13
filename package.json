@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node ./src/server.js",
     "dev:timeout": "timeout 9000 nodemon --watch src ./src/server.js",
     "dev": "nodemon --watch src ./src/server.js"
   },
