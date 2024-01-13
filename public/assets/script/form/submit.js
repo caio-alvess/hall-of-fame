@@ -32,10 +32,8 @@ class Form {
         e.preventDefault();
         try {
             imgInfo = await images.getImageInfo();
-            console.log(imgInfo);
 
         } catch (error) {
-            console.log(error);
             userScreen.log('Erro ao processar imagem');
             userScreen.loadingToggle();
             return;
