@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node ./src/server.js && redis-cli -u redis://default:WdsLVBE0KA9RZDMReVnHdcoZkhErlkqu@redis-15983.c309.us-east-2-1.ec2.cloud.redislabs.com:15983",
+    "build": "npm install && redis-cli -u redis://default:WdsLVBE0KA9RZDMReVnHdcoZkhErlkqu@redis-15983.c309.us-east-2-1.ec2.cloud.redislabs.com:15983",
+    "start": "node ./src/server.js",
     "dev:timeout": "timeout 9000 nodemon --watch src ./src/server.js",
     "dev": "nodemon --watch src ./src/server.js"
   },
