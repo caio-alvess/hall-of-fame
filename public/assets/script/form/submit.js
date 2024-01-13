@@ -1,51 +1,86 @@
 import { Images } from '../image-loader.js';
+import { UserScreen as screen } from '../emails/modules/screen.js';
+const userScreen = screen({
+    log: '#log',
+    submit: '#submit',
+    loadingScreen: '.loading-screen'
+});
 
-document.onsubmit = async (e) => {
-    const nameIpt = document.querySelector('#name');
-    const socialmediaIpt = document.querySelector('#socialmedia');
-    const socialmediaUsr = document.querySelector('#socialmedia-user');
+class Form {
+    constructor() {
+        this.textArea = document.querySelector('#message');
+        this.counter = document.querySelector('#counter');
 
-    const images = new Images();
+        //bind
+        this.counterTextArea = this.counterTextArea.bind(this);
+        this.submitForm = this.submitForm.bind(this);
 
-    let imgInfo;
-    e.preventDefault();
-    try {
-        imgInfo = await images.getImageInfo();
-        console.log(imgInfo);
-
-    } catch (error) {
-        console.error(error) // CONSERTAR COM PRIORIDADE
-        throw new Error(error);
+    }
+    counterTextArea() {
+        let counter = this.counter;
+        let textArea = this.textArea;
+        counter.innerText = textArea.value.length;
     }
 
-    const userInfo = {
-        name: nameIpt.value,
-        socialmedia: socialmediaIpt.value,
-        socialmediaUser: socialmediaUsr.value,
-        img_url: imgInfo.url
-    }
+    async submitForm(e) {
+        const formData = new FormData(document.querySelector('form'));
+        const textArea = document.querySelector('#message');
+        let imgInfo;
+        const images = new Images();
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userInfo)
-    };
-
-    (async () => {
+        userScreen.loadingToggle()
+        e.preventDefault();
         try {
+            imgInfo = await images.getImageInfo();
+            console.log(imgInfo);
+
+        } catch (error) {
+            console.log(error);
+            userScreen.log('Erro ao processar imagem');
+            userScreen.loadingToggle();
+            return;
+        }
+
+        const userInfo = {
+            name: formData.get('name'),
+            socialmedia: formData.get('socialmedia'),
+            socialmediaUser: formData.get('socialmediaUser'),
+            message: formData.get(''),
+            img_url: imgInfo.url,
+            message: textArea.value
+        }
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userInfo)
+        };
+
+        try {
+
             const res = await fetch('/form', options)
-            if (res.status > 299) {
-                throw new Error('error on request');
+            if (res.status === 201) {
+                location.replace('/');
+            }
+            if (res.status === 400) {
+                userScreen.log('Aparentemente você esqueceu de preencher algum campo no formulário.')
+                userScreen.loadingToggle();
+            }
+            else if (res.status >= 500) {
+                userScreen.log('Erro interno no servidor.\nPor favor, verifique sua conexão com a internet e tente novamente.')
+                userScreen.loadingToggle();
+                throw new Error();
             }
         } catch (error) {
             const res = await images.deleteImage(imgInfo.public_id);
-            if (res) {
-                console.log('Photo not uploaded');
-            } else {
-                throw new TypeError('bad request');
-            }
+            console.warn('photo deleted');
         }
-    })()
-} 
+    }
+    start() {
+        this.textArea.addEventListener('input', this.counterTextArea)
+        document.onsubmit = this.submitForm;
+    }
+}
+new Form().start();

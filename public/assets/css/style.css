@@ -44,3 +44,12 @@
     right: 0;
 
 }
+
+.show {
+    border: none;
+    display: inline;
+    color: blue;
+    text-decoration: underline;
+    background-color: unset;
+    padding: 0;
+}

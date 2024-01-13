@@ -10,6 +10,7 @@ module.exports = {
         const body = req.body;
         const email = req.session.email;
         await db.create({ ...body, email })
+        await req.session.destroy();
         return res.status(201).json({ status: 'success', message: 'created' });
     })
-}
+} 

@@ -84,19 +84,25 @@ module.exports = {
             if (!user || !(user instanceof Object)) {
                 throw new TypeError('user is not valid. Check if is an object.');
             };
-            const wishList = ['name', 'email', 'socialmedia', 'socialmediaUser', 'img_url'];
+            const wishList = ['name', 'email', 'socialmedia', 'socialmediaUser', 'img_url', 'message'];
 
             for (let property of wishList) {
                 if (!user.hasOwnProperty(property)) {
                     throw new TypeError('missing properties');
                 }
             }
-            const { name, email, socialmedia, img_url, socialmediaUser } = user;
+            const { name, email, socialmedia, img_url, socialmediaUser, message } = user;
             const id = uuid();
-            await pool.query(`
-                    INSERT INTO users
-                    VALUES('${id}', '${name}', '${email}', '${socialmedia}', '${img_url}', '${socialmediaUser}');`)
-            console.log('created');
+            try {
+                await pool.query(`
+                    INSERT INTO users (_id, name, email, socialmedia, img_url, message, socialmediauser)
+                    VALUES($1, $2, $3, $4, $5, $6, $7)`, [id, name, email, socialmedia, img_url, message, socialmediaUser]);
+                console.log('created');
+
+            } catch (error) {
+                console.error(error);
+                throw new Error(error);
+            }
         },
 
 

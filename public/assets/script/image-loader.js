@@ -18,6 +18,10 @@ function toDefault() {
 
 imgInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
+    if (!file) {
+        toDefault();
+        return false;
+    }
     let fileSizeMB = file.size / 1024 ** 2;
     if (fileSizeMB >= 10) {
         alert("Seu arquivo é grande demais para upload.")
