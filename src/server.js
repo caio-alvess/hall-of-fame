@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('node:path');
 const session = require('express-session');
@@ -5,15 +6,19 @@ const redis = require('redis');
 const redisStore = require('connect-redis').default;
 const globalErrorHandler = require('./controllers/error.controller.js');
 
+
+
 const redisClient = redis.createClient({
-    password: process.env.REDIS_PASSWORD,
+    password: 'WdsLVBE0KA9RZDMReVnHdcoZkhErlkqu',
     socket: {
         host: process.env.REDIS_HOST,
         port: process.env.REDIS_PORT
     }
 });
+redisClient.connect()
+    .then()
+    .catch((e) => console.error(e));
 
-redisClient.connect().catch((e) => console.error(e));
 
 //import routes
 const indexRoutes = require('./routes/index.routes');
@@ -52,7 +57,4 @@ app.use(authRoutes);
 
 
 app.use(globalErrorHandler);
-app.listen(
-    process.env.PORT || 3000,
-    '0.0.0.0'
-)
+app.listen(process.env.PORT || 3000, () => console.log('running'))
