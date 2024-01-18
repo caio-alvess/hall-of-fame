@@ -9,7 +9,7 @@ const globalErrorHandler = require('./controllers/error.controller.js');
 
 
 const redisClient = redis.createClient({
-    password: 'WdsLVBE0KA9RZDMReVnHdcoZkhErlkqu',
+    password: process.env.REDIS_PASSWORD,
     socket: {
         host: process.env.REDIS_HOST,
         port: process.env.REDIS_PORT
