@@ -19,7 +19,7 @@ function b64toImage(body) {
     return new Promise((resolve, reject) => {
         let { url: rawUrl, filename } = body;
         let url = rawUrl.replace(/^data:image\/[^;]+;base64,/, "");
-        const pathWay = path.resolve(__dirname, '../', 'temp', `${filename}`);
+        const pathWay = path.resolve(__dirname, 'temp', `${filename}`);
         const buffer = Buffer.from(url, 'base64');
         fs.writeFile(pathWay, buffer, (e) => {
             if (e) {
