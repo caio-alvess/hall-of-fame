@@ -12,6 +12,3 @@ The objective of this project is to create a website where users can log in and 
   - Express
 - PostgreSQL
 - and more...
-
-you can see it working here
-[Hall of Fame](https://hall-of-fame-gpcr.onrender.com/)
